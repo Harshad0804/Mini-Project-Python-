@@ -6,3 +6,6 @@ class Contact(models.Model):
     email=models.EmailField()
     mobile=models.PositiveBigIntegerField()
     remarks=models.TextField()
+
+    def __str__(self):
+        return self.name

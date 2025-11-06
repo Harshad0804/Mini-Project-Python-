@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Contact
 
 # Create your views here.
 def index(request):
@@ -6,12 +7,21 @@ def index(request):
 
 def contact(request):
     if request.method=="POST":
-        pass
+        Contact.objects.create(
+            name=request.POST['name'],
+            email=request.POST['email'],
+            mobile=request.POST['mobile'],
+            remarks=request.POST['remarks'],
+        )
+        msg="Contact Saved Successfully"
+        contact=Contact.objects.all().order_by("-id")[:3]
+        return render(request,'contact.html',{'msg':msg,'contact':contact}) 
     else:
-        return render(request,'contact.html') 
+        contact=Contact.objects.all()
+        return render(request,'contact.html',{'contact':contact}) 
 
 def signup(request):
     return render(request,'signup.html') 
 
 def login(request):
-    return render(request,'login.html') 
+    return render(request,'login.html')  
