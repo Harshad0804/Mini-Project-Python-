@@ -12,7 +12,7 @@
 
 <body>
     {% if msg %}
-        <b style="color: brown;">{(msg)}</b>
+        <b style="color: brown;">{{msg}}</b>
     {% endif %}
     <form name="contact" method="post" action="{% url 'contact' %}">
         {% csrf_token %}
