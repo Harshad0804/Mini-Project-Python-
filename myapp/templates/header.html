@@ -35,8 +35,13 @@
                 <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {% if request.session.email %}
+                <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-log-out"></span>LOG-OUT({{request.session.fname}})</a></li>
+                {% else %}
                 <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
+
             </ul>
         </div>
     </nav>
