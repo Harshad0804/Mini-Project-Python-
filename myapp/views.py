@@ -57,8 +57,8 @@ def login(request):
                 msg="Incorrect Password"
                 return render(request,'login.html',{'msg':msg})
         except:
-                msg="Email Does Not Exist"
-                return render(request,'login.html',{'msg':msg}) 
+            msg="Email Does Not Exist"
+            return render(request,'login.html',{'msg':msg}) 
     else:
         return render(request,'login.html')  
 
