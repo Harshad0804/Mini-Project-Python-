@@ -9,9 +9,6 @@
     <title>Document</title>
 </head>
 <body>
-        {% if msg %}
-        <b style="color: brown;">{{msg}}</b>
-    {% endif %}
     <form name="signup" method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         <table>
@@ -50,6 +47,9 @@
             </tr>
         </table>
     </form>
+    {% if msg %}
+        <b style="color: green;">{{msg}}</b>
+    {% endif %}
 </body>
 </html>
 

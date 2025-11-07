@@ -35,12 +35,12 @@ def signup(request):
                     mobile=request.POST['mobile'],
                     address=request.POST['address'],
                     password=request.POST['password'],
-        )
-            msg="User Signup Successfully"
-            return render(request,'signup.html',{'msg':msg}) 
-        else:
-            msg="Password & Confirm Password Does Not Matched...!!"
-            return render(request,'signup.html',{'msg':msg}) 
+                )
+                msg="User Signup Successfully"
+                return render(request,'signup.html',{'msg':msg}) 
+            else:
+                msg="Password & Confirm Password Does Not Matched...!!"
+                return render(request,'signup.html',{'msg':msg}) 
     else:
         return render(request,'signup.html',)
 
@@ -51,7 +51,8 @@ def login(request):
             if user.password==request.POST['password']:
                 request.session['email']=user.email
                 request.session['fname']=user.fname
-                return render(request,'index.html')
+                msg="Logged In Successfully"
+                return render(request,'index.html',{'msg':msg})
             else:
                 msg="Incorrect Password"
                 return render(request,'login.html',{'msg':msg})
