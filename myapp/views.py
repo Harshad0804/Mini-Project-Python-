@@ -111,4 +111,11 @@ def profile(request):
         return render(request,'profile.html',{'user':user})
 
 def forgot_password(request):
-    return render(request,'forgot-password.html')
+    if request.method=="POST":
+        try:
+            user=User.objects.get(email=request.POST['email'])
+        except:
+            msg="Email Not Registered...!!"
+            return render(request,'forgot-password.html',{'msg':msg})
+    else:
+        return render(request,'forgot-password.html')
