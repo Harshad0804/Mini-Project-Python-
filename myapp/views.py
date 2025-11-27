@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from .models import Contact,User
+from django.core.mail import send_mail
+from django.conf import settings
+import random
 
 # Create your views here.
 def index(request):
@@ -114,8 +117,52 @@ def forgot_password(request):
     if request.method=="POST":
         try:
             user=User.objects.get(email=request.POST['email'])
+            otp=random.randint(1000,9999)
+            context = {}
+            address = request.POST['email']
+            subject = 'OTP for Forgot Password'
+            message = 'Hello, Your OTP For Forgot Password is '+str(otp)
+
+            if address and subject and message:
+                try:
+                    send_mail(subject, message, settings.EMAIL_HOST_USER, [address,])
+                    context['result'] = 'Email sent successfully'
+                    request.session['otp']=otp
+                    request.session['email1']=request.POST['email']
+                except Exception as e:
+                    context['result'] = f'Error sending email: {e}'
+            else:
+                context['result'] = 'All fields are required'
+    
+            return render(request, "otp.html", context)
         except:
             msg="Email Not Registered...!!"
             return render(request,'forgot-password.html',{'msg':msg})
     else:
         return render(request,'forgot-password.html')
+
+def verify-otp(request):
+    otp1=int(request.session['otp'])
+    otp2=int(request.POST['otp'])
+
+    if otp1==otp2:
+        del request.session['otp']
+        return.render(request,'new-password.html',{'msg':'Please Set Your New Password'})
+    else:
+        return render(request,'otp.html',{'msg':'Invalid OTP...!!!'})
+
+def new_password(request):
+    if request.POST['new_password']==request.POST['cnew_password']:
+        user=User.objects.get(email=request.session['email1'])
+        if user.password!=request.POST['new_password']:
+            user.password=request.POST['new_password']
+            user.save()
+            msg="Password Updated Successfully"
+            del request.session['email1']
+            return render(request,'login.html',{'msg':msg})
+        else:
+            msg="Your New Password Can't Be From Your Old Password"
+            return render(request,'new-password.html',{'msg':msg})
+    else:
+        msg="New Password And Confirm New Password Does not Match..!!"
+        return render(request,'new-password.html',{'msg':msg})
